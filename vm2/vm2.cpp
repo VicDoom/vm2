@@ -126,23 +126,21 @@ void fillMass(int n, double*& up, double*& down , double*& center, double*h) {
 		center[i] = 2 * (h[i] + h[i + 1]);
 	}
 
-	
+	cout << '\n' << center[0] << ' ' << up[0];
+	for (int i = 1; i < n; i++) {
+		cout << '\n' << down[i] << ' ' << center[i] << ' ' << up[i];
+	}
 
-	//for (int i = 1; i < n; i++) {
-	//
-	//	cout << '\n' << down[i] << ' ' << center[i] << ' ' << up[i];
-	//
-	//}
 }
 
 void fillF(double*& F, int n, double A, double B, double* h, double* f) {
 
-	F[0] = 3 * (f[1] - f[0]) / (h[1] * h[1]) - 3 * A / h[1];
+	F[0] = (3 / h[1]) * ((f[1] - f[0]) / h[1] - A) ;
 	F[n] = B;
 
 	for (int i = 1; i < n; i++) {
 
-		F[i] = 6 * (f[i + 1] - f[i]) / h[i + 1] - 6 * (f[i] - f[i - 1]) / h[i];
+		F[i] = 6 * ((f[i + 1] - f[i]) / h[i + 1] - (f[i] - f[i - 1]) / h[i]);
 
 	}
 
@@ -170,14 +168,36 @@ void findC(int n, double* a, double* c, double* b, double* F, double*& indexC) {
 	//	<< ' ' << c[n] << ' ' << m[n];
 	indexC[n] = (F[n] - a[n] * l[n]) / (c[n] + a[n] * m[n]);
 
+	//cout << '\n' << "indexC[n] = " << indexC[n];
+
 	for (int i = n - 1; i > -1; i--) {
 
-		//cout << '\n' << m[i + 1] << ' ' << indexC[i + 1] << ' ' << l[i + 1];
+		//cout << '\n' << "вычисление indexC[i]" << m[i + 1] << ' ' << indexC[i + 1] << ' ' << l[i + 1];
 
 		indexC[i] = m[i + 1] * indexC[i + 1] + l[i + 1];
 
 	}
 
+}
+
+void solveMatrix(int n, double* a, double* c, double* b, double* f, double *& x)
+{
+	a[0] = 0;
+	b[n] = 0;
+	double m;
+	for (int i = 1; i < n + 1; i++)
+	{
+		m = a[i] / c[i - 1];
+		c[i] = c[i] - m * b[i - 1];
+		f[i] = f[i] - m * f[i - 1];
+	}
+
+	x[n] = f[n - 1] / c[n - 1];
+
+	for (int i = n - 1; i >= 0; i--)
+	{
+		x[i] = (f[i] - b[i] * x[i + 1]) / c[i];
+	}
 }
 
 void findA(int n, double* yArray, double*& indexA) {
@@ -199,6 +219,8 @@ void findDAndB(int n, double* yArray, double* indexC,
 		//	<< indexC[i - 1] << ' ' << h[i] << '\n';
 
 		indexD[i] = (indexC[i] - indexC[i - 1]) / h[i];
+
+		//cout << '\n' << "indexD[i]" << indexD[i];
 		indexB[i] = h[i] * indexC[i] / 2 - h[i] * h[i] * indexD[i] / 6 
 			+ (yArray[i] - yArray[i - 1]) / h[i];
 
@@ -241,6 +263,13 @@ void func1(double x) {
 void func2(double x) {
 
 	cout << "\nДействительное значение в точке = " << 10 * x + 3;
+
+}
+
+//константная функция
+void func3(double x) {
+
+	cout << "\nДействительное значение в точке = " << 61;
 
 }
 
@@ -291,14 +320,15 @@ int main() {
 	fillF(F, n, A, B, h, yArray);
 
 	findC(n, down, center, up, F, indexC); // эта и следующие функции 
+	//solveMatrix(n, down, center, up, F, indexC);
 	findA(n, yArray, indexA);			   // ищут коэффициенты сплайна
 	findDAndB(n, yArray, indexC, indexD, indexB, h);
 
 	for (int i = 1; i <= n; i++) {
 
-		//cout << '\n' << "Коэффициенты сплайнов" << i << " по счёту ";
-		//cout << '\n' << indexA[i] << ' ' << indexB[i] << ' ' 
-		//	<< indexC[i] << ' ' << indexD[i] << '\n';
+		cout << '\n' << "Коэффициенты сплайнов" << i << " по счёту ";
+		cout << '\n' << indexA[i] << ' ' << indexB[i] << ' ' 
+			<< indexC[i] << ' ' << indexD[i] << '\n';
 	}
 
 	int area;
@@ -311,12 +341,12 @@ int main() {
 		double d = indexD[area];
 		double x = xArray[area];
 
-		//cout << x;
+		cout << "\nxi = " << x;
 
 		YY = a + b * (XX - x) + c * (XX - x) * (XX - x) / 2 
 			+ d * (XX - x) * (XX - x) * (XX - x) / 6;
 
-		//cout << '\n' << area;
+		cout << "\n отрезок с номером " << area;
 
 		cout << "\nЗначение сплайна в точке XX равно " << YY;
 	}
@@ -324,6 +354,7 @@ int main() {
 	func(XX);
 	//func1(XX);
 	//func2(XX);
+	//func3(XX);
 
 	return 0;
 }
