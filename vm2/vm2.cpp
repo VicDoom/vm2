@@ -126,10 +126,10 @@ void fillMass(int n, double*& up, double*& down , double*& center, double*h) {
 		center[i] = 2 * (h[i] + h[i + 1]);
 	}
 
-	cout << '\n' << center[0] << ' ' << up[0];
-	for (int i = 1; i < n; i++) {
-		cout << '\n' << down[i] << ' ' << center[i] << ' ' << up[i];
-	}
+	//cout << '\n' << center[0] << ' ' << up[0];
+	//for (int i = 1; i < n; i++) {
+	//	cout << '\n' << down[i] << ' ' << center[i] << ' ' << up[i];
+	//}
 
 }
 
@@ -248,28 +248,28 @@ bool findArea(int n, double* xArray, double XX, int &area) {
 // кубическая функция 
 void func(double x) {
 
-	cout << "\nДействительное значение в точке = " << x * x * x + x * x + 1;
+	cout << "\nЗначение функции в точке XX = " << x * x * x + x * x + 1;
 
 }
 
 // квадратичная функция
 void func1(double x) {
 
-	cout << "\nДействительное значение в точке = " << x * x - x;
+	cout << "\nЗначение функции в точке = " << x * x - x;
 
 }
 
 // линейная функция 
 void func2(double x) {
 
-	cout << "\nДействительное значение в точке = " << 10 * x + 3;
+	cout << "\nЗначение функции в точке = " << 10 * x + 3;
 
 }
 
 //константная функция
 void func3(double x) {
 
-	cout << "\nДействительное значение в точке = " << 61;
+	cout << "\nЗначение функции в точке = " << 61;
 
 }
 
@@ -285,7 +285,7 @@ int main() {
 	ifstream fin;
 	ofstream fout;
 
-	fin.open("input.txt");
+	fin.open("input3.txt");
 	fout.open("output.txt");
 
 	if (checkInput(fin)) {
@@ -324,11 +324,14 @@ int main() {
 	findA(n, yArray, indexA);			   // ищут коэффициенты сплайна
 	findDAndB(n, yArray, indexC, indexD, indexB, h);
 
+	cout << '\n' << "Коэффициенты сплайнов: \n";
+
 	for (int i = 1; i <= n; i++) {
 
-		cout << '\n' << "Коэффициенты сплайнов" << i << " по счёту ";
-		cout << '\n' << indexA[i] << ' ' << indexB[i] << ' ' 
-			<< indexC[i] << ' ' << indexD[i] << '\n';
+		cout << '\n' << "A[" << i << "] = " << indexA[i]
+			<< ",  " << "B[" << i << "] = " << indexB[i]
+			<< ",  " << "C[" << i << "] = " << indexC[i]
+			<< ",  " << "D[" << i << "] = " << indexD[i] << '\n';
 	}
 
 	int area;
@@ -341,20 +344,18 @@ int main() {
 		double d = indexD[area];
 		double x = xArray[area];
 
-		cout << "\nxi = " << x;
-
 		YY = a + b * (XX - x) + c * (XX - x) * (XX - x) / 2 
 			+ d * (XX - x) * (XX - x) * (XX - x) / 6;
 
-		cout << "\n отрезок с номером " << area;
+		cout << "\nТочка XX располагается на отрезке " << area << '\n';
 
-		cout << "\nЗначение сплайна в точке XX равно " << YY;
+		cout << "\nЗначение сплайна в точке XX = " << YY;
 	}
 
-	func(XX);
+	//func(XX);
 	//func1(XX);
 	//func2(XX);
-	//func3(XX);
+	func3(XX);
 
 	return 0;
 }
