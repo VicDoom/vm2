@@ -246,30 +246,37 @@ bool findArea(int n, double* xArray, double XX, int &area) {
 }
 
 // кубическая функция 
-void func(double x) {
+void func(double x, ofstream& fout) {
 
-	cout << "\nЗначение функции в точке XX = " << x * x * x + x * x + 1;
+	double solve = x * x * x + x * x + 1;
+	cout << "\nЗначение функции в точке XX = " << solve;
+	fout << "\nЗначение функции в точке XX = " << solve;
 
 }
 
 // квадратичная функция
-void func1(double x) {
+void func1(double x, ofstream& fout) {
 
-	cout << "\nЗначение функции в точке = " << x * x - x;
+	double solve = x * x - x;
+	cout << "\nЗначение функции в точке = " << solve;
+	fout << "\nЗначение функции в точке = " << solve;
 
 }
 
 // линейная функция 
-void func2(double x) {
+void func2(double x, ofstream& fout) {
 
-	cout << "\nЗначение функции в точке = " << 10 * x + 3;
+	double solve = 10 * x + 3;
+	cout << "\nЗначение функции в точке = " << solve;
+	fout << "\nЗначение функции в точке = " << solve;
 
 }
 
 //константная функция
-void func3(double x) {
+void func3(double x, ofstream &fout) {
 
 	cout << "\nЗначение функции в точке = " << 61;
+	fout << "\nЗначение функции в точке = " << 61;
 
 }
 
@@ -285,7 +292,7 @@ int main() {
 	ifstream fin;
 	ofstream fout;
 
-	fin.open("input3.txt");
+	fin.open("input.txt");
 	fout.open("output.txt");
 
 	if (checkInput(fin)) {
@@ -350,12 +357,14 @@ int main() {
 		cout << "\nТочка XX располагается на отрезке " << area << '\n';
 
 		cout << "\nЗначение сплайна в точке XX = " << YY;
+		fout << "\nЗначение сплайна в точке XX = " << YY;
+
 	}
 
-	//func(XX);
-	//func1(XX);
-	//func2(XX);
-	func3(XX);
+	func(XX, fout);
+	//func1(XX, fout);
+	//func2(XX, fout);
+	//func3(XX, fout);
 
 	return 0;
 }
